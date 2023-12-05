@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STOPWATCH</title>
+    <style>
+        main {
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+            border-radius: 5px;
+            font-family: 'Arial', sans-serif;
+            width: 300px;
+            font-style:normal;
+            font-weight: 400;
+            font-size:20px;
+            line-height:56px;
+            Color:#222222;
+            margin: auto;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        #heading{
+            text-align: center;
+            position: absolute;
+            top: 39%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        #time {
+            margin-left: 10px;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        #start_pause_btn{
+            background-color: #8AB4F8;
+        }
+        button {
+            font-size: 16px;
+            font-weight: 500;
+            margin: 0 10px;
+            padding: 5px 15px;
+            border: 1px solid;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="heading"><h3>STOPWATCH</h3></div>
+    <main>
+    <div id="time">00s 00</div>
+    <button id="start_pause_btn" onclick="SwitchStopwatch()">START</button>
+    <button onclick="reset()">RESET</button>
+    </main>
+
+    <script>
+        let timer;
+        let milliseconds = 0;
+        let seconds = 0;
+        let isRunning = false;
+
+        function SwitchStopwatch() {
+            if (isRunning) {
+                isRunning = false;
+                clearInterval(timer);
+                document.getElementById('start_pause_btn').innerText = 'START';
+            } 
+            else {
+                isRunning = true;
+                timer = setInterval(updateTime, 10);
+                document.getElementById('start_pause_btn').innerText = 'PAUSE';
+            }
+        }
+
+        function reset() {
+            clearInterval(timer);
+            isRunning = false;
+            milliseconds = 0;
+            seconds = 0;
+            updateTime();
+            document.getElementById('start_pause_btn').innerText = 'START';
+        }
+
+        function updateTime() {
+            let hours = Math.floor(seconds / 3600);
+            let minutes = Math.floor((seconds % 3600) / 60);
+            let remainingSeconds = seconds % 60;
+
+            let timeString = `${hours > 0 ? hours.toString().padStart(2, '0') + 'h ' : ''} ${minutes > 0 ? minutes.toString().padStart(2, '0') + 'm ' : ''} ${remainingSeconds.toString().padStart(2, '0')}s ${milliseconds.toString().padStart(2,'0').slice(0, 2)}`;
+            document.getElementById('time').innerText = timeString;
+
+            milliseconds += 10;
+            if (milliseconds === 1000) {
+                milliseconds = 0;
+                seconds++;
+            }
+        }
+    </script>
+
+</body>
+</html>
